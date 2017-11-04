@@ -51,6 +51,7 @@ export class AppComponent {
               display: true
           }
       });
+      this.playAudio('gun-cock');
     }
 
     buttonClicked() {
@@ -71,11 +72,19 @@ export class AppComponent {
                 this.chart.config.data.datasets[0].backgroundColor[i % size] = 'rgba(0, 0, 0, 1)';
                 this.chart.update();
                 if (i == r) {
+                    this.playAudio('gun-shot');
                     this.result = this.chart.config.data.labels[i % size] + ' has gotten the case. Hate that!';
                 }
             });
         }
         console.log(this.chart.config.data.labels[(r % size)] + ' has gotten the case!')
+    }
+
+    playAudio(sound) {
+        let audio = new Audio();
+        audio.src = "../assets/sounds/" + sound + ".mp3";
+        audio.load();
+        audio.play();
     }
 
     sleep (millisec) {
