@@ -10,11 +10,10 @@ import 'chart.piecelabel.js';
 })
 
 export class AppComponent {
-    title = 'AWS Support Revolver';
     result: string;
     canvas: any;
     ctx: any;
-    chart: any;
+    chart: Chart;
     ngAfterViewInit() {
         this.canvas = document.getElementById('da-revolver');
         this.ctx = this.canvas.getContext('2d');
@@ -54,13 +53,11 @@ export class AppComponent {
       this.playAudio('gun-cock');
     }
 
-    buttonClicked() {
+    buttonClicked(): void {
         console.log(this.chart);
-        this.result = null;
         let prev = null;
         const size = this.chart.config.data.datasets[0].backgroundColor.length;
         const r = Math.floor(Math.random() * size) + size;
-        console.log(r);
         for (let i = 0; i <= r; i++) {
             this.sleep(i * 400).then(() => {
                 if (prev) {
@@ -80,14 +77,14 @@ export class AppComponent {
         console.log(this.chart.config.data.labels[(r % size)] + ' has gotten the case!')
     }
 
-    playAudio(sound) {
+    playAudio(sound: string): void {
         let audio = new Audio();
-        audio.src = "../assets/sounds/" + sound + ".mp3";
+        audio.src = '../assets/sounds/' + sound + '.mp3';
         audio.load();
         audio.play();
     }
 
-    sleep (millisec) {
+    sleep (millisec): any {
         return new Promise((resolve) => setTimeout(resolve, millisec));
     }
 }
