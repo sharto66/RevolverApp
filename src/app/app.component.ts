@@ -1,4 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import { Chart } from 'chart.js';
 import 'chart.piecelabel.js';
 
@@ -10,6 +11,8 @@ import 'chart.piecelabel.js';
 })
 
 export class AppComponent {
+    constructor(private http: HttpClient) {};
+    spinInProgress: boolean = false;
     result: string;
     canvas: any;
     ctx: any;
@@ -54,7 +57,7 @@ export class AppComponent {
     }
 
     buttonClicked(): void {
-        console.log(this.chart);
+        this.spinInProgress = true;
         let prev = null;
         const size = this.chart.config.data.datasets[0].backgroundColor.length;
         const r = Math.floor(Math.random() * size) + size;
@@ -77,8 +80,12 @@ export class AppComponent {
     }
 
     agentSelected(agent: string): void {
+        this.spinInProgress = false;
         this.playAudio('gun-shot');
         this.result = agent + ' has gotten the case. Hate that!';
+        this.http
+        .get('http://httpbin.org/get', {responseType: 'text'})
+        .subscribe(data => console.log(data));
     }
 
     playAudio(sound: string): void {
