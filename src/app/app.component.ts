@@ -59,7 +59,7 @@ export class AppComponent {
         const size = this.chart.config.data.datasets[0].backgroundColor.length;
         const r = Math.floor(Math.random() * size) + size;
         for (let i = 0; i <= r; i++) {
-            this.sleep(i * 400).then(() => {
+            this.sleep(i * 500).then(() => {
                 if (prev) {
                     let index = (i % size) - 1;
                     if (i % size == 0) index = size - 1;
@@ -69,12 +69,16 @@ export class AppComponent {
                 this.chart.config.data.datasets[0].backgroundColor[i % size] = 'rgba(0, 0, 0, 1)';
                 this.chart.update();
                 if (i == r) {
-                    this.playAudio('gun-shot');
-                    this.result = this.chart.config.data.labels[i % size] + ' has gotten the case. Hate that!';
+                    this.agentSelected(this.chart.config.data.labels[i % size]);
                 }
             });
         }
         console.log(this.chart.config.data.labels[(r % size)] + ' has gotten the case!')
+    }
+
+    agentSelected(agent: string): void {
+        this.playAudio('gun-shot');
+        this.result = agent + ' has gotten the case. Hate that!';
     }
 
     playAudio(sound: string): void {
