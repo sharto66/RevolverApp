@@ -1,8 +1,6 @@
-import { Component, AfterViewInit } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import 'chart.piecelabel.js';
-
 
 @Component({
     selector: 'app-root',
@@ -11,7 +9,9 @@ import 'chart.piecelabel.js';
 })
 
 export class AppComponent {
-    constructor(private http: HttpClient) {};
+    @ViewChild('formPost') formPost: ElementRef;
+    agent: string;
+    caseId: number;
     spinInProgress: boolean = false;
     result: string;
     canvas: any;
@@ -80,12 +80,21 @@ export class AppComponent {
     }
 
     agentSelected(agent: string): void {
+        this.agent = agent;
         this.spinInProgress = false;
         this.playAudio('gun-shot');
         this.result = agent + ' has gotten the case. Hate that!';
-        this.http
-        .get('http://httpbin.org/get', {responseType: 'text'})
-        .subscribe(data => console.log(data));
+        this.assignCaseToAgent();
+    }
+
+    assignCaseToAgent(): void {
+        let form: HTMLElement = this.formPost.nativeElement as HTMLElement;
+        //this.sleep(1000).then(() => {
+            console.log("hit");
+            console.log(this.agent);
+            console.log(this.caseId);
+            form.click();
+        //});
     }
 
     playAudio(sound: string): void {

@@ -18,3 +18,7 @@ h1 {
 canvas#da-revolver {
     display: inline !important;
 }
+
+.form-post {
+    display: none;
+}

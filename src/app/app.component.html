@@ -1,8 +1,9 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
-    <h1>
-        AWS Support Revolver
-    </h1>
+    <h1>AWS Support Revolver</h1>
+    <div>
+        <!-- <input [(ngModel)]="caseId" type="number"> -->
+    <div>
     <div class="chart-div">
         <canvas id="da-revolver" width="500" height="500"></canvas>
     </div>
@@ -13,5 +14,13 @@
     <br><br>
     <div class="result-text">
         {{ result }}
+    </div>
+    <div class="form-post">
+        <!-- Change the GET method to POST -->
+        <form action="https://paragon-na.amazon.com/hz/action/transfer-case-to-agent" target="_blank" method="GET">
+            <input name="caseId" value="{{caseId}}">
+            <input name="agentLogin" value="{{agent}}">
+            <button #formPost type="submit">Submit</button>
+        </form>
     </div>
 </div>
