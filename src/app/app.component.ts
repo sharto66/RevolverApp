@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 import 'chart.piecelabel.js';
 
@@ -9,24 +10,35 @@ import 'chart.piecelabel.js';
 })
 
 export class AppComponent {
+    @ViewChild('chimePost') chimePost: ElementRef;
     @ViewChild('formPost') formPost: ElementRef;
-    agent: string;
-    caseId: number;
+
+    constructor(private http: HttpClient) {}
+
+    agent: string = null;
+    caseId: number = 4635139811;
     spinInProgress: boolean = false;
     result: string;
     canvas: any;
     ctx: any;
     chart: Chart;
+
+    ngOnInit() {
+        this.http.get('https://awssupport.amazon.com/profile/refresh_partial/agent_availability?profile_name=dms').subscribe(data => {
+            console.log(data);
+        });
+    }
+
     ngAfterViewInit() {
         this.canvas = document.getElementById('da-revolver');
         this.ctx = this.canvas.getContext('2d');
         this.chart = new Chart(this.ctx, {
             type: 'pie',
             data: {
-                labels: ["seahartn", "cantwelc", "veglienz", "artiedag", "rprenty", "danred", "ohaganc"],
+                labels: ["seahartn", "veglienz", "eanbyrne", "artiedag", "bmathe"],
                 datasets: [{
                     label: '# of Votes',
-                    data: [1,1,1,1,1,1,1],
+                    data: [1,1,1,1,1],
                     backgroundColor: [
                         'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
@@ -80,25 +92,28 @@ export class AppComponent {
     }
 
     agentSelected(agent: string): void {
+        this.result = agent + ' has gotten the case. Hate that!';
         this.agent = agent;
         this.spinInProgress = false;
         this.playAudio('gun-shot');
-        this.result = agent + ' has gotten the case. Hate that!';
-        this.assignCaseToAgent();
+        const form: HTMLElement = this.formPost.nativeElement as HTMLElement;
+        const chime: HTMLElement = this.chimePost.nativeElement as HTMLElement;
+        console.log(this.agent);
+        console.log(this.caseId);
+        this.sleep(1500).then(() => {
+            form.click();
+            chime.click();
+        });
     }
 
     assignCaseToAgent(): void {
-        let form: HTMLElement = this.formPost.nativeElement as HTMLElement;
-        //this.sleep(1000).then(() => {
-            console.log("hit");
-            console.log(this.agent);
-            console.log(this.caseId);
-            form.click();
-        //});
+        /*const url: string = 'https://hooks.chime.aws/incomingwebhooks/1e2f18a7-b594-4b49-8ce7-fadc19589df2?token=V2RDZzZMWTR8MXxSWmRmei1IdjlWMl9rMHpQQ2tGZk5Pdm42NTVWd2RJSzdwRTRERXVpazNZ';
+        const body = {'Content': this.agent + ' has been assigned case ' + this.caseId + ' by Support Revolver.'}
+        this.http.post(url, body).subscribe();*/
     }
 
     playAudio(sound: string): void {
-        let audio = new Audio();
+        const audio = new Audio();
         audio.src = '../assets/sounds/' + sound + '.mp3';
         audio.load();
         audio.play();

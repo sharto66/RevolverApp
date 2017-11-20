@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -10,8 +10,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    //NOTE: If FormsModule is imported HTML form post doesn't open new tab, but does it still send request? Need to test.
-    //FormsModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

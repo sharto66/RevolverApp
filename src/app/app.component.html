@@ -1,26 +1,32 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
     <h1>AWS Support Revolver</h1>
     <div>
-        <!-- <input [(ngModel)]="caseId" type="number"> -->
-    <div>
+        <input [value]="caseId" (input)="caseId = $event.target.value">
+    </div>
+    <br>
     <div class="chart-div">
         <canvas id="da-revolver" width="500" height="500"></canvas>
     </div>
     <br>
-    <button class="btn btn-success" (click)="buttonClicked()" [disabled]="spinInProgress">
+    <button (click)="buttonClicked()" [disabled]="spinInProgress">
         Feeling lucky, punk?
     </button>
     <br><br>
     <div class="result-text">
         {{ result }}
     </div>
-    <div class="form-post">
-        <!-- Change the GET method to POST -->
-        <form action="https://paragon-na.amazon.com/hz/action/transfer-case-to-agent" target="_blank" method="GET">
+    <div class="invisible-content">
+        <form action="https://paragon-na.amazon.com/hz/action/transfer-case-to-agent" target="post-output" method="POST">
             <input name="caseId" value="{{caseId}}">
             <input name="agentLogin" value="{{agent}}">
+            <input name="transferReason" value="Transferred to {{agent}}">
             <button #formPost type="submit">Submit</button>
         </form>
+        <form enctype="text/plain" target="chime-output" method="POST" action="">
+            <input name='{"Content": "{{agent}}@ has been transferred case {{caseId}} by Support Revolver", "trash": "' value='"}'>
+            <button #chimePost type="submit">Submit</button>
+        </form>
+        <iframe name="post-output"></iframe>
+        <iframe name="chime-output"></iframe>
     </div>
 </div>
