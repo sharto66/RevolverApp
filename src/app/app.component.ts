@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Engineer } from './engineer/engineer';
 import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 import 'chart.piecelabel.js';
@@ -13,41 +14,71 @@ export class AppComponent {
     @ViewChild('chimePost') chimePost: ElementRef;
     @ViewChild('formPost') formPost: ElementRef;
 
-    constructor(private http: HttpClient) {}
-
+    engineers: Engineer[] = [];
     agent: string = null;
     caseId: number = 4635139811;
     spinInProgress: boolean = false;
-    result: string;
+    result: string = '';
     canvas: any;
     ctx: any;
     chart: Chart;
 
-    ngOnInit() {
+    constructor(private http: HttpClient) {
+        console.log('constructer fired');
+        this.engineers.push(new Engineer('seahartn', true));
+        this.engineers.push(new Engineer('bmathe', true));
+        this.engineers.push(new Engineer('rprenty', true));
+        this.engineers.push(new Engineer('danred', true));
+        this.engineers.push(new Engineer('dniwood', true));
+        this.engineers.push(new Engineer('portelaa', true));
+        this.engineers.push(new Engineer('artiedag', true));
+        this.engineers.push(new Engineer('veglienz', true));
+        this.engineers.push(new Engineer('todicesc', true));
+        this.engineers.push(new Engineer('eanbyrne', true));
+        this.engineers.push(new Engineer('ohaganc', true));
+        this.engineers.push(new Engineer('waleedr', true));
+        this.engineers.push(new Engineer('cantwelc', true));
+        this.engineers.push(new Engineer('yijia', true));
+        this.engineers.push(new Engineer('mkesham', true));
+        this.engineers.push(new Engineer('jakepres', true));
+    }
+
+    /*ngOnInit() {
         this.http.get('https://awssupport.amazon.com/profile/refresh_partial/agent_availability?profile_name=dms').subscribe(data => {
             console.log(data);
         });
-    }
+    }*/
 
     ngAfterViewInit() {
         this.canvas = document.getElementById('da-revolver');
         this.ctx = this.canvas.getContext('2d');
+        this.generateChart();
+        this.playAudio('gun-cock');
+    }
+
+    generateChart(): void {
+        let data: number[] = [];
+        let labels: string[] = [];
+        let backgroundColor: string[] = [];
+        for (let eng of this.engineers) {
+            if (eng.available) {
+                labels.push(eng.name);
+                data.push(1);
+                backgroundColor.push('rgba(255, 99, 132, 1)');
+            }
+        }
+        /*console.log(labels);
+        console.log(data);
+        console.log(backgroundColor);*/
+        if (this.chart) this.chart.destroy();
         this.chart = new Chart(this.ctx, {
             type: 'pie',
             data: {
-                labels: ["seahartn", "veglienz", "eanbyrne", "artiedag", "bmathe"],
+                labels: labels,
                 datasets: [{
-                    label: '# of Votes',
-                    data: [1,1,1,1,1],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(123, 102, 215, 1)',
-                        'rgba(194, 100, 135, 1)',
-                        'rgba(20, 200, 235, 1)',
-                        'rgba(132, 130, 178, 1)'
-                    ],
+                    label: '',
+                    data: data,
+                    backgroundColor: backgroundColor,
                     borderWidth: 1
                 }]
             },
@@ -57,15 +88,15 @@ export class AppComponent {
                 },
                 pieceLabel: {
                     render: 'label',
-                    fontSize: 16,
+                    fontSize: 14,
                     fontColor: '#fff',
                     fontStyle: 'bold'
               },
-              responsive: false,
+              responsive: true,
               display: true
           }
       });
-      this.playAudio('gun-cock');
+      console.log(this.engineers);
     }
 
     buttonClicked(): void {
@@ -104,6 +135,17 @@ export class AppComponent {
             form.click();
             chime.click();
         });
+    }
+
+    availabilityChecked(event: HTMLInputElement): void {
+        console.log(event.checked);
+        for (let i = 0; i < this.engineers.length; i++) {
+            if (this.engineers[i].name === event.name) {
+                console.log(this.engineers[i].name);
+                this.engineers[i].available = event.checked;
+            }
+        }
+        this.generateChart();
     }
 
     assignCaseToAgent(): void {
