@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Engineer } from './engineer/engineer';
+import { Engineer } from './engineer';
 import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 import 'chart.piecelabel.js';
